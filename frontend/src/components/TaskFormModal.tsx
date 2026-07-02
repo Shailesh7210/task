@@ -8,6 +8,7 @@ import { Input } from "@/components/Input";
 import { TextArea } from "@/components/TextArea";
 import { Select } from "@/components/Select";
 import { Button } from "@/components/Button";
+import { api, ApiError } from "@/lib/api";
 
 const taskFormSchema = z.object({
   title: z.string().trim().min(1, "Title is required").max(120),
@@ -49,6 +50,10 @@ export function TaskFormModal({
   const [formError, setFormError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const [isSuggesting, setIsSuggesting] = useState(false);
+  const [aiError, setAiError] = useState("");
+  const [aiApplied, setAiApplied] = useState(false);
+
   useEffect(() => {
     if (isOpen) {
       setValues(
@@ -64,11 +69,43 @@ export function TaskFormModal({
       );
       setFieldErrors({});
       setFormError("");
+      setAiError("");
+      setAiApplied(false);
     }
   }, [isOpen, initialTask]);
 
   const update = <K extends keyof TaskFormValues>(key: K, value: TaskFormValues[K]) => {
     setValues((prev) => ({ ...prev, [key]: value }));
+  };
+
+  const handleAiSuggest = async () => {
+    if (!values.title.trim()) {
+      setAiError("Type a title first");
+      return;
+    }
+    setAiError("");
+    setAiApplied(false);
+    setIsSuggesting(true);
+    try {
+      const data = await api.post<{
+        suggestion: { description: string; priority: TaskPriority };
+      }>("/api/ai/suggest", { title: values.title.trim() });
+
+      setValues((prev) => ({
+        ...prev,
+        description: data.suggestion.description,
+        priority: data.suggestion.priority,
+      }));
+      setAiApplied(true);
+    } catch (err) {
+      setAiError(
+        err instanceof ApiError
+          ? err.message
+          : "AI suggestion failed. You can still fill this in manually."
+      );
+    } finally {
+      setIsSuggesting(false);
+    }
   };
 
   const handleSubmit = async (e: FormEvent) => {
@@ -113,15 +150,23 @@ export function TaskFormModal({
             onChange={(e) => update("title", e.target.value)}
             error={fieldErrors.title}
           />
-          {/* AI Suggest wiring lands in the next phase */}
           <button
             type="button"
-            disabled
-            className="mt-1.5 text-xs font-medium text-primary/50 cursor-not-allowed"
-            title="Coming next: generate description + priority from the title"
+            onClick={handleAiSuggest}
+            disabled={isSuggesting}
+            className="mt-1.5 inline-flex items-center gap-1.5 text-xs font-medium text-primary hover:underline disabled:cursor-not-allowed disabled:text-ink-muted disabled:no-underline"
           >
-            ✨ AI Suggest
+            {isSuggesting && (
+              <span className="h-3 w-3 animate-spin rounded-full border-2 border-current border-t-transparent" />
+            )}
+            {isSuggesting ? "Thinking..." : "✨ AI Suggest"}
           </button>
+          {aiError && <p className="mt-1 text-xs text-danger">{aiError}</p>}
+          {aiApplied && !aiError && (
+            <p className="mt-1 text-xs text-success">
+              Suggestion applied — review and edit below before saving.
+            </p>
+          )}
         </div>
 
         <TextArea

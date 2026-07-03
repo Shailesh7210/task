@@ -16,7 +16,7 @@ export function AuthLayout({
   return (
     <div className="flex min-h-screen">
       {/* Brand panel */}
-      <div className="relative hidden w-[40%] flex-col justify-between overflow-hidden bg-ink px-10 py-12 text-white lg:flex">
+      <div className="relative hidden w-[40%] flex-col justify-between overflow-hidden bg-brand-panel px-10 py-12 text-white lg:flex">
         <div className="text-lg font-bold tracking-tight">Task Manager</div>
 
         <div className="flex items-center gap-6">

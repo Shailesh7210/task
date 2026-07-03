@@ -8,6 +8,7 @@
   --color-ink: #12161c;
   --color-ink-muted: #5b6472;
   --color-border: #e2e5eb;
+  --color-brand-panel: #12161c;
 
   --color-primary: #3454d1;
   --color-primary-dark: #263a9e;
@@ -50,6 +51,7 @@
   --color-ink: var(--color-ink);
   --color-ink-muted: var(--color-ink-muted);
   --color-border: var(--color-border);
+  --color-brand-panel: var(--color-brand-panel);
   --color-primary: var(--color-primary);
   --color-primary-dark: var(--color-primary-dark);
   --color-primary-light: var(--color-primary-light);

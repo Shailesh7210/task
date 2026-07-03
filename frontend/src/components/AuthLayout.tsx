@@ -1,5 +1,8 @@
+"use client";
+
 import { ReactNode } from "react";
 import { StatusThread } from "./StatusThread";
+import { ThemeToggle } from "./ThemeToggle";
 
 export function AuthLayout({
   title,
@@ -31,7 +34,10 @@ export function AuthLayout({
       </div>
 
       {/* Form panel */}
-      <div className="flex w-full flex-1 flex-col items-center justify-center bg-bg px-6 py-12 lg:w-[60%]">
+      <div className="relative flex w-full flex-1 flex-col items-center justify-center bg-bg px-6 py-12 lg:w-[60%]">
+        <div className="absolute right-6 top-6">
+          <ThemeToggle />
+        </div>
         <div className="w-full max-w-sm">
           <div className="mb-8 lg:hidden">
             <div className="text-lg font-bold tracking-tight text-ink">

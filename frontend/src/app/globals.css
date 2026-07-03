@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
   --color-bg: #f6f7fb;
   --color-surface: #ffffff;
@@ -19,6 +21,27 @@
 
   --color-danger: #d64545;
   --color-danger-light: #fbe9e9;
+}
+
+.dark {
+  --color-bg: #0f1115;
+  --color-surface: #171a21;
+  --color-ink: #edeff2;
+  --color-ink-muted: #9aa3b2;
+  --color-border: #2a2e37;
+
+  --color-primary: #6d8bff;
+  --color-primary-dark: #8ea3ff;
+  --color-primary-light: #1c2440;
+
+  --color-success: #3fbf82;
+  --color-success-light: #123326;
+
+  --color-warning: #f0b657;
+  --color-warning-light: #3a2c11;
+
+  --color-danger: #e5716f;
+  --color-danger-light: #3a1c1c;
 }
 
 @theme inline {
@@ -44,6 +67,7 @@ body {
   background: var(--color-bg);
   color: var(--color-ink);
   font-family: var(--font-sans);
+  transition: background-color 0.15s ease, color 0.15s ease;
 }
 
 /* Visible keyboard focus, respected everywhere */

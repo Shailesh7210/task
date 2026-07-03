@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { Button } from "@/components/Button";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 export function Navbar() {
   const { user, logout } = useAuth();
@@ -21,6 +22,7 @@ export function Navbar() {
         </div>
 
         <div className="flex items-center gap-4">
+          <ThemeToggle />
           <span className="text-sm text-ink-muted">{user?.name}</span>
           <Button variant="secondary" onClick={handleLogout}>
             Log out
